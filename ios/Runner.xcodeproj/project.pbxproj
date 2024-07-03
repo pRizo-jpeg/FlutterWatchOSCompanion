@@ -14,11 +14,11 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		9D06C99F2C356E1E001BF01D /* watchAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D06C99E2C356E1E001BF01D /* watchAppApp.swift */; };
+		9D06C99F2C356E1E001BF01D /* watchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D06C99E2C356E1E001BF01D /* watchApp.swift */; };
 		9D06C9A12C356E1E001BF01D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D06C9A02C356E1E001BF01D /* ContentView.swift */; };
 		9D06C9A32C356E20001BF01D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D06C9A22C356E20001BF01D /* Assets.xcassets */; };
 		9D06C9A62C356E20001BF01D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D06C9A52C356E20001BF01D /* Preview Assets.xcassets */; };
-		9D06C9AA2C356E20001BF01D /* watchApp Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 9D06C99C2C356E1E001BF01D /* watchApp Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9D06C9AA2C356E20001BF01D /* watchApp.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 9D06C99C2C356E1E001BF01D /* watchApp.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +55,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				9D06C9AA2C356E20001BF01D /* watchApp Watch App.app in Embed Watch Content */,
+				9D06C9AA2C356E20001BF01D /* watchApp.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,8 +78,8 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9D06C99C2C356E1E001BF01D /* watchApp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "watchApp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D06C99E2C356E1E001BF01D /* watchAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = watchAppApp.swift; sourceTree = "<group>"; };
+		9D06C99C2C356E1E001BF01D /* watchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D06C99E2C356E1E001BF01D /* watchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = watchApp.swift; sourceTree = "<group>"; };
 		9D06C9A02C356E1E001BF01D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9D06C9A22C356E20001BF01D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9D06C9A52C356E20001BF01D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				9D06C99D2C356E1E001BF01D /* watchApp Watch App */,
+				9D06C99D2C356E1E001BF01D /* watchApp */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
 			);
@@ -138,7 +138,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
-				9D06C99C2C356E1E001BF01D /* watchApp Watch App.app */,
+				9D06C99C2C356E1E001BF01D /* watchApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -158,15 +158,15 @@
 			path = Runner;
 			sourceTree = "<group>";
 		};
-		9D06C99D2C356E1E001BF01D /* watchApp Watch App */ = {
+		9D06C99D2C356E1E001BF01D /* watchApp */ = {
 			isa = PBXGroup;
 			children = (
-				9D06C99E2C356E1E001BF01D /* watchAppApp.swift */,
+				9D06C99E2C356E1E001BF01D /* watchApp.swift */,
 				9D06C9A02C356E1E001BF01D /* ContentView.swift */,
 				9D06C9A22C356E20001BF01D /* Assets.xcassets */,
 				9D06C9A42C356E20001BF01D /* Preview Content */,
 			);
-			path = "watchApp Watch App";
+			path = watchApp;
 			sourceTree = "<group>";
 		};
 		9D06C9A42C356E20001BF01D /* Preview Content */ = {
@@ -219,9 +219,9 @@
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9D06C99B2C356E1E001BF01D /* watchApp Watch App */ = {
+		9D06C99B2C356E1E001BF01D /* watchApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9D06C9AB2C356E20001BF01D /* Build configuration list for PBXNativeTarget "watchApp Watch App" */;
+			buildConfigurationList = 9D06C9AB2C356E20001BF01D /* Build configuration list for PBXNativeTarget "watchApp" */;
 			buildPhases = (
 				9D06C9982C356E1E001BF01D /* Sources */,
 				9D06C9992C356E1E001BF01D /* Frameworks */,
@@ -231,9 +231,9 @@
 			);
 			dependencies = (
 			);
-			name = "watchApp Watch App";
+			name = watchApp;
 			productName = "watchApp Watch App";
-			productReference = 9D06C99C2C356E1E001BF01D /* watchApp Watch App.app */;
+			productReference = 9D06C99C2C356E1E001BF01D /* watchApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -275,7 +275,7 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
-				9D06C99B2C356E1E001BF01D /* watchApp Watch App */,
+				9D06C99B2C356E1E001BF01D /* watchApp */,
 			);
 		};
 /* End PBXProject section */
@@ -367,7 +367,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D06C9A12C356E1E001BF01D /* ContentView.swift in Sources */,
-				9D06C99F2C356E1E001BF01D /* watchAppApp.swift in Sources */,
+				9D06C99F2C356E1E001BF01D /* watchApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +381,7 @@
 		};
 		9D06C9A82C356E20001BF01D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9D06C99B2C356E1E001BF01D /* watchApp Watch App */;
+			target = 9D06C99B2C356E1E001BF01D /* watchApp */;
 			targetProxy = 9D06C9A72C356E20001BF01D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -701,7 +701,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"watchApp Watch App/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"watchApp/Preview Content\"";
 				DEVELOPMENT_TEAM = FGTGZVYZB5;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -743,7 +743,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"watchApp Watch App/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"watchApp/Preview Content\"";
 				DEVELOPMENT_TEAM = FGTGZVYZB5;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -782,7 +782,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"watchApp Watch App/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"watchApp/Preview Content\"";
 				DEVELOPMENT_TEAM = FGTGZVYZB5;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -842,7 +842,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9D06C9AB2C356E20001BF01D /* Build configuration list for PBXNativeTarget "watchApp Watch App" */ = {
+		9D06C9AB2C356E20001BF01D /* Build configuration list for PBXNativeTarget "watchApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9D06C9AC2C356E20001BF01D /* Debug */,

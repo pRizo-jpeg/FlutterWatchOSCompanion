@@ -1,8 +1,9 @@
 import UIKit
 import Flutter
+import WatchConnectivity
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, WCSessionDelegate {
   private let channelName = "FlutterToWatchOS"
 
   override func application(
@@ -11,6 +12,11 @@ import Flutter
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
 
+    if WCSession.isSupported() {
+        WCSession.default.delegate = self
+        WCSession.default.activate()
+    }
+      
     // Set up MethodChannel
     if let controller = window?.rootViewController as? FlutterViewController {
       let flutterChannel = FlutterMethodChannel(name: channelName, binaryMessenger: controller.binaryMessenger)
@@ -68,10 +74,14 @@ import Flutter
     }
   }
 
-  private func sendCountToWatchOS(count: Int) {
-    // Implement your code to send count to WatchOS here
-    print("Sending count to WatchOS: \(count)")
-  }
+    private func sendCountToWatchOS(count: Int) {
+       if WCSession.default.isReachable {
+           WCSession.default.sendMessage(["count": count], replyHandler: nil, errorHandler: { error in
+               print("Error sending count to WatchOS: \(error)")
+           })
+       }
+       print("Sending count to WatchOS: \(count)")
+     }
 
   private func sendMessageToWatchOS(message: String) {
     // Implement your code to send message to WatchOS here
@@ -87,6 +97,20 @@ import Flutter
     // Implement your code to send initial values to WatchOS here
     print("Sending initial values to WatchOS: count: \(count), message: \(message), user: \(user.name ?? ""), \(user.id ?? 0)")
   }
+    
+    // WCSessionDelegate methods
+      func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        // Handle activation
+      }
+
+      func sessionDidBecomeInactive(_ session: WCSession) {
+        // Handle session becoming inactive
+      }
+
+      func sessionDidDeactivate(_ session: WCSession) {
+        // Handle session deactivation
+        WCSession.default.activate()
+      }
 }
 
 class User {
