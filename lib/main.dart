@@ -5,7 +5,6 @@ import 'package:guatchos/view/demo_controller.dart';
 import 'package:guatchos/view/demo_view.dart';
 import 'package:guatchos/view/demo_vm.dart';
 import 'package:guatchos/watch_comm_manager.dart';
-import 'package:guatchos/watch_data_sample.dart';
 
 Future<void> main() async {
   await AppManager.initializeDependencies();
