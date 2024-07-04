@@ -32,6 +32,13 @@ import WatchConnectivity
 
   private func handleMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
+    case "sendImageToWatchOS":
+      if let pngData = call.arguments as? FlutterStandardTypedData {
+        sendImageToWatchOS(pngData: pngData.data)
+        result(nil)
+      } else {
+        result(FlutterError(code: "INVALID_ARGUMENT", message: "PNG data not provided", details: nil))
+    }
     case "sendCountToWatchOS":
       if let count = call.arguments as? Int {
         sendCountToWatchOS(count: count)
@@ -74,6 +81,15 @@ import WatchConnectivity
     }
   }
 
+    private func sendImageToWatchOS(pngData: Data) {
+        if WCSession.default.isReachable {
+            WCSession.default.sendMessage(["img": pngData], replyHandler: nil, errorHandler: { error in
+                print("Failed to send image to WatchOS: \(error)")
+            })
+        }
+    }
+
+
     private func sendCountToWatchOS(count: Int) {
        if WCSession.default.isReachable {
            WCSession.default.sendMessage(["count": count], replyHandler: nil, errorHandler: { error in
@@ -84,17 +100,27 @@ import WatchConnectivity
      }
 
   private func sendMessageToWatchOS(message: String) {
-    // Implement your code to send message to WatchOS here
+      if WCSession.default.isReachable {
+          WCSession.default.sendMessage(["msg": message], replyHandler: nil, errorHandler: { error in
+              print("Error sending msg to WatchOS: \(error)")
+          })
+      }
     print("Sending message to WatchOS: \(message)")
   }
 
   private func sendUserToWatchOS(user: User) {
-    // Implement your code to send user to WatchOS here
+      if WCSession.default.isReachable {
+          WCSession.default.sendMessage(["user": user], replyHandler: nil, errorHandler: { error in
+              print("Error sending user to WatchOS: \(error)")
+          })
+      }
     print("Sending user to WatchOS: \(user.name ?? ""), \(user.id ?? 0)")
   }
 
   private func sendInitialValuesToWatchOS(count: Int, message: String, user: User) {
-    // Implement your code to send initial values to WatchOS here
+    sendCountToWatchOS(count: count)
+    sendMessageToWatchOS(message: message)
+    sendUserToWatchOS(user: user)
     print("Sending initial values to WatchOS: count: \(count), message: \(message), user: \(user.name ?? ""), \(user.id ?? 0)")
   }
     

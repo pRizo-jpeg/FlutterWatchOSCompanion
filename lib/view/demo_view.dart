@@ -19,20 +19,25 @@ class DemoPageView extends StatelessWidget {
         title: Text(title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            // Use Obx to update the UI when the counter changes
-            Obx(() => Text(
-              '${demoPageVm.counter}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            )),
-            // Additional UI to display message from WatchOS
-            Obx(() => Text(
-              '${demoPageVm.message ?? 'No message'}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            )),
+        child: Column( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Image.asset('assets/logo.png'),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text('You have pushed the button this many times:'),
+                // Use Obx to update the UI when the counter changes
+                Obx(() => Text(
+                  '${demoPageVm.counter}',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                )),
+                // Additional UI to display message from WatchOS
+                Obx(() => Text(
+                  '${demoPageVm.message ?? 'No message'}',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                )),
+              ],
+            ),
           ],
         ),
       ),

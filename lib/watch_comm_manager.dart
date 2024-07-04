@@ -12,8 +12,35 @@ class WatchOsCommManager extends GetxController {
   void init() {
     _demoPageVm = Get.find<DemoPageVm>();
     sendInitialValuesToWatchOS();
+    sendImageToWatchOS('assets/logo.png');
   }
 
+  Future<void> sendInitialValuesToWatchOS() async {
+    try {
+      await _channel.invokeMethod('sendInitialValuesToWatchOS', {
+        'count': 0,
+        'message': 'Hello from Flutter',
+        'user': {
+          'name': _demoPageVm.user?.value.name,
+          'id': _demoPageVm.user?.value.id,
+        },
+      });
+    } catch (e) {
+      log("Failed to send initial values to WatchOS: $e");
+    }
+  }
+
+  Future<void> sendImageToWatchOS(String assetName) async {
+    try {
+
+      final ByteData assetData = await rootBundle.load(assetName);
+      final Uint8List pngData = assetData.buffer.asUint8List();
+
+      await _channel.invokeMethod('sendImageToWatchOS', pngData);
+    } catch (e) {
+      print("Failed to send image to WatchOS: $e");
+    }
+  }
 
   Future<void> sendCountToWatchOS(int count) async {
     try {
@@ -42,19 +69,6 @@ class WatchOsCommManager extends GetxController {
     }
   }
 
-  Future<void> sendInitialValuesToWatchOS() async {
-    try {
-      await _channel.invokeMethod('sendInitialValuesToWatchOS', {
-        'count': 0,
-        'message': 'Hello from Flutter',
-        'user': {
-          'name': _demoPageVm.user?.value.name,
-          'id': _demoPageVm.user?.value.id,
-        },
-      });
-    } catch (e) {
-      log("Failed to send initial values to WatchOS: $e");
-    }
-  }
+
 }
 
