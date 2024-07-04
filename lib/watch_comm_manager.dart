@@ -13,6 +13,13 @@ class WatchOsCommManager extends GetxController {
     _demoPageVm = Get.find<DemoPageVm>();
     sendInitialValuesToWatchOS();
     sendImageToWatchOS('assets/logo.png');
+
+    _channel.setMethodCallHandler((call) async {
+      if (call.method == "receiveMessageFromWatchOS") {
+        final String message = call.arguments;
+        handleReceivedMessage(message);
+      }
+    });
   }
 
   Future<void> sendInitialValuesToWatchOS() async {
@@ -69,6 +76,10 @@ class WatchOsCommManager extends GetxController {
     }
   }
 
-
+  void handleReceivedMessage(String message) {
+    Get.showSnackbar(
+        GetSnackBar(title: "WatchOS",  message: "$message",snackPosition: SnackPosition.TOP,duration: 1.seconds,)
+    );
+  }
 }
 

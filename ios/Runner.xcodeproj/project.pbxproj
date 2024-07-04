@@ -14,6 +14,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		9D0276642C36CDC400D96932 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0276632C36CDC400D96932 /* ExtensionDelegate.swift */; };
 		9D06C99F2C356E1E001BF01D /* watchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D06C99E2C356E1E001BF01D /* watchApp.swift */; };
 		9D06C9A12C356E1E001BF01D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D06C9A02C356E1E001BF01D /* ContentView.swift */; };
 		9D06C9A32C356E20001BF01D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D06C9A22C356E20001BF01D /* Assets.xcassets */; };
@@ -78,6 +79,7 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9D0276632C36CDC400D96932 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		9D06C99C2C356E1E001BF01D /* watchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D06C99E2C356E1E001BF01D /* watchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = watchApp.swift; sourceTree = "<group>"; };
 		9D06C9A02C356E1E001BF01D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				9D06C99E2C356E1E001BF01D /* watchApp.swift */,
+				9D0276632C36CDC400D96932 /* ExtensionDelegate.swift */,
 				9D06C9A02C356E1E001BF01D /* ContentView.swift */,
 				9D06C9A22C356E20001BF01D /* Assets.xcassets */,
 				9D06C9A42C356E20001BF01D /* Preview Content */,
@@ -368,6 +371,7 @@
 			files = (
 				9D06C9A12C356E1E001BF01D /* ContentView.swift in Sources */,
 				9D06C99F2C356E1E001BF01D /* watchApp.swift in Sources */,
+				9D0276642C36CDC400D96932 /* ExtensionDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
