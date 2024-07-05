@@ -13,19 +13,19 @@ struct ContentView: View {
                 Image(uiImage: image)
                     .resizable()  /// Make the image resizable
                     .scaledToFit()  /// Scale the image to fit within the specified frame
-                    .frame(width: 100, height: 100)  /// Set the frame size to 100x100
+                    .frame(width: 70, height: 70) 
             } else {
                 /// If no image is available, display a text message
                 Text("No image received")
             }
             
             /// Display the received message using a Text view
-            Text("msg: \(extensionDelegate.msg)")
-                .font(.headline)
+            Text("\(extensionDelegate.msg)")
+                .font(.subheadline)
             
             /// Display the received count value using a Text view
             Text("Value: \(extensionDelegate.value)")
-                .font(.headline)
+                .font(.subheadline)
             
             /// Button to send a message to the iOS device
             Button(action: {
@@ -40,8 +40,4 @@ struct ContentView: View {
     }
 }
 
-/// Preview provider for the ContentView
-#Preview {
-    /// Create an instance of ContentView for previewing
-    ContentView()
-}
+

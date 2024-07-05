@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter WatchOS Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade100),
         useMaterial3: true,
       ),
       home: const DemoPageView(title: 'Flutter WatchOS companion'),
@@ -29,11 +29,10 @@ class MyApp extends StatelessWidget {
 
 class AppManager {
   AppManager._();
-
   static Future<void> initializeDependencies() async {
     Get.put(DemoPageVm());
-    Get.put(DemoPageController());
     final WatchOsCommManager watchCommManager = Get.put(WatchOsCommManager());
+    Get.put(DemoPageController());
     watchCommManager.init();
   }
 }

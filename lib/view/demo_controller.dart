@@ -4,12 +4,17 @@ import 'package:guatchos/watch_comm_manager.dart';
 
 class DemoPageController extends GetxController {
   DemoPageController();
+
   final DemoPageVm demoPageVm = Get.find<DemoPageVm>();
+  final WatchOsCommManager watchCommManager = Get.find<WatchOsCommManager>();
 
   void increment() {
     demoPageVm.counter++;
-    // Add code to send updated count to WatchOS
-    final WatchOsCommManager watchCommManager = Get.find<WatchOsCommManager>();
     watchCommManager.sendCountToWatchOS(demoPageVm.counter.value);
   }
+
+  void sendNotification() {
+    watchCommManager.sendNotificationToWatchOS("Notification", "This is a notification triggered by Flutter");
+  }
+
 }

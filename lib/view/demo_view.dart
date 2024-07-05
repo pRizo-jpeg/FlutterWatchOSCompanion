@@ -19,32 +19,65 @@ class DemoPageView extends StatelessWidget {
         title: Text(title),
       ),
       body: Center(
-        child: Column( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Image.asset('assets/logo.png'),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text('You have pushed the button this many times:'),
-                // Use Obx to update the UI when the counter changes
+                const Text('You have pushed the + button this many times:'),
                 Obx(() => Text(
-                  '${demoPageVm.counter}',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                )),
-                // Additional UI to display message from WatchOS
-                Obx(() => Text(
-                  '${demoPageVm.message ?? 'No message'}',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                )),
+                      '${demoPageVm.counter}',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    )),
+                const SizedBox(
+                  height: 100,
+                )
               ],
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: demoController.increment,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: ElevatedButton(
+              onPressed: demoController.sendNotification,
+              style: ElevatedButton.styleFrom(
+                elevation: 8,
+                backgroundColor: Colors.blue.shade100,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.notification_add,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 15),
+                    Text(
+                      "Queue a notification\ntakes ~10 seconds",
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          FloatingActionButton(
+            onPressed: demoController.increment,
+            backgroundColor: Colors.blue.shade100,
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }

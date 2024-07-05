@@ -1,17 +1,19 @@
 import UIKit
 import Flutter
 import WatchConnectivity
+import UserNotifications
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate, WCSessionDelegate {
-    private let channelName = "FlutterToWatchOS" /// Declare communication channel name
+    private let channelName = "FlutterToWatchOS" /// Declare communication channel same as Flutter layer
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         GeneratedPluginRegistrant.register(with: self)
 
-        /// Check if iPhone device has a paired Watch
+        // Check if iPhone device has a paired Watch //
+        
         if WCSession.isSupported() {
             /// Get the default Watch <->iPhone session
             let session = WCSession.default
@@ -36,10 +38,8 @@ import WatchConnectivity
             }
         }
         
-        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
-    
     
     
 
@@ -47,6 +47,15 @@ import WatchConnectivity
 
     private func handleMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
+        case "sendNotificationToWatchOS":
+                   if let args = call.arguments as? [String: Any],
+                      let title = args["title"] as? String,
+                      let body = args["body"] as? String {
+                       sendNotificationToWatchOS(title: title, body: body)
+                       result(nil)
+                   } else {
+                       result(FlutterError(code: "INVALID_ARGUMENT", message: "Title or body not provided", details: nil))
+                   }
         case "sendImageToWatchOS":
             /// Handle sending an image to WatchOS
             if let pngData = call.arguments as? FlutterStandardTypedData {
@@ -106,6 +115,20 @@ import WatchConnectivity
     
     
     // Communication from iPhone to watchOS methods //
+    
+    /// Function to send notification to WatchOS
+    private func sendNotificationToWatchOS(title: String, body: String) {
+        print("Received a notification: ' \(title) - \(body) '")
+            if WCSession.default.isReachable {
+                WCSession.default.sendMessage(["title": title, "body": body], replyHandler: { response in
+                    print("Received response from WatchOS: \(response)")
+                }, errorHandler: { error in
+                    print("Failed to send message to WatchOS: \(error.localizedDescription)")
+                })
+            } else {
+                print("WatchOS device is not reachable.")
+            }
+        }
     
     /// Function to send an image to WatchOS
     private func sendImageToWatchOS(pngData: Data) {
@@ -217,6 +240,11 @@ import WatchConnectivity
             replyHandler(["status": "Invalid data"])
         }
     }
+    
+    // Handle notifications
+    override func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+          completionHandler([.alert, .sound])
+      }
 }
 
 

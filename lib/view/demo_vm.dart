@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:guatchos/watch_data_sample.dart';
+import 'package:guatchos/user_model_sample.dart';
 
 class DemoPageVm {
   RxInt counter = 0.obs;
