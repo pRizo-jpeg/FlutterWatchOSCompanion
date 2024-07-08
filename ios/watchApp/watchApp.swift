@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 // WatchOS app entry point //
 
 @main

@@ -24,6 +24,7 @@
 		9D0F306E2C3C07F70081740A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0F306D2C3C07F70081740A /* User.swift */; };
 		9D0F30702C3C0AA90081740A /* SendDataToWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0F306F2C3C0AA90081740A /* SendDataToWatch.swift */; };
 		9D0F30722C3C0AD90081740A /* SendDataToFlutter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0F30712C3C0AD90081740A /* SendDataToFlutter.swift */; };
+		9D0F30732C3C33FC0081740A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0F306D2C3C07F70081740A /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -385,6 +386,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D0F30732C3C33FC0081740A /* User.swift in Sources */,
 				9D06C9A12C356E1E001BF01D /* DemoView.swift in Sources */,
 				9D06C99F2C356E1E001BF01D /* watchApp.swift in Sources */,
 				9D0276642C36CDC400D96932 /* WatchDelegate.swift in Sources */,

@@ -121,18 +121,3 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
 }
 
 
-// User model //
-class User{
-    var name: String?
-    var id: Int?
-
-    init(name: String?, id: Int?) {
-        self.name = name
-        self.id = id
-    }
-
-    init(dictionary: [String: Any]) {
-        self.name = dictionary["name"] as? String
-        self.id = dictionary["id"] as? Int
-    }
-}
