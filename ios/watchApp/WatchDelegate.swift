@@ -10,6 +10,9 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
     @Published var user: User = User(name: nil, id: nil)
     @Published var image: UIImage? = nil
 
+    /// Singleton instance
+    static let shared = WatchDelegate()
+    
     override init() {
         super.init()
         /// Check if Watch device has a paired iPhone and activate the session
