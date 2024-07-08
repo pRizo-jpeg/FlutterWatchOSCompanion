@@ -3,7 +3,7 @@ import WatchConnectivity
 import SwiftUI
 import UserNotifications
 
-class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, ObservableObject, UNUserNotificationCenterDelegate {
+class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, ObservableObject, UNUserNotificationCenterDelegate {
     /// properties to update at the UI
     @Published var value: Int = 0
     @Published var msg: String = ""
@@ -12,13 +12,11 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Obser
 
     override init() {
         super.init()
-        /// Check if Watch device has a paired iPhone
+        /// Check if Watch device has a paired iPhone and activate the session
         if WCSession.isSupported() {
             /// Get the default Watch <->iPhone session
             let session = WCSession.default
-            /// Set the session delegate to self
             session.delegate = self
-            /// Activate the session
             session.activate()
         }
 
