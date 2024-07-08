@@ -16,9 +16,10 @@ import WatchConnectivity
         // Initialize Watch Connectivity session
         MethodCallHandler.shared.initializeSession()
         
-        // Flutter<->Native methods communication channel setup //
+        // Flutter<->Native methods communication channel setup
+        
         /// UI updates and interactions with the Flutter engine must happen on the main thread
-        /// Using DispatchQueue.main.async ensures that the setup code runs on the main thread
+        /// Using _DispatchQueue.main.async_ ensures that the setup code runs on the main thread
         DispatchQueue.main.async {
             if let controller = self.window?.rootViewController as? FlutterViewController {
                 let flutterChannel = FlutterMethodChannel(name: self.channelName, binaryMessenger: controller.binaryMessenger)
@@ -34,7 +35,7 @@ import WatchConnectivity
     
     // Handle notifications //
     
-    /// The userNotificationCenter(_:willPresent:withCompletionHandler:) method is part of the UNUserNotificationCenterDelegate protocol,
+    /// The _userNotificationCenter(:willPresent:withCompletionHandler:) method is part of the UNUserNotificationCenterDelegate protocol
     /// it allows our app to handle notifications when they are delivered while the app is in the foreground.
     /// Without this method, notifications might not be displayed if your app is currently running.
     override func userNotificationCenter(

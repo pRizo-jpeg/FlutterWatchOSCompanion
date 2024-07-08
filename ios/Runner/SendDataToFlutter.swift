@@ -5,6 +5,8 @@ class SendDataToFlutter {
     static let shared = SendDataToFlutter()
     private init() {}
     
+    // Methods to send data to Flutter via methodChannels //
+    
     func sendMessageToFlutter(msg: String) {
         DispatchQueue.main.async {
             if let controller = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController {

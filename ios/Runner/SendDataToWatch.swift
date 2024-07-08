@@ -5,6 +5,8 @@ class SendDataToWatch {
     static let shared = SendDataToWatch()
     private init() {}
     
+    // Methods to send data to WatchOS via default WCSession //
+    
     func sendNotificationToWatchOS(title: String, body: String) {
         print("Received a notification: ' \(title) - \(body) '")
         if WCSession.default.isReachable {

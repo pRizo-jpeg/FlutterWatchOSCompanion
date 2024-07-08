@@ -10,6 +10,9 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
     @Published var user: User = User(name: nil, id: nil)
     @Published var image: UIImage? = nil
 
+    /// Singleton instance
+    static let shared = WatchDelegate()
+    
     override init() {
         super.init()
         /// Check if Watch device has a paired iPhone and activate the session
@@ -30,7 +33,8 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
 
     
     // Handle received messages from iPhone //
-    
+    /// UI updates and interactions with the Flutter engine must happen on the main thread
+    /// Using _DispatchQueue.main.async_ ensures that the code runs on the main thread
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         var response: [String: Any] = [:]
         if let imgData = message["img"] as? Data {
