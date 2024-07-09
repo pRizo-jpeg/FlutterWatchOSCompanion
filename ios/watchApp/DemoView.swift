@@ -6,15 +6,10 @@ struct DemoView: View {
     var body: some View {
         TabView {
             PageOneView()
-                .tabItem {
-                    Label("Page 1", systemImage: "1.circle")
-                }
             PageTwoView()
-                .tabItem {
-                    Label("Page 2", systemImage: "3.circle")
-                }
+              
         }
-        .tabViewStyle(PageTabViewStyle())
+        .tabViewStyle(.page(indexDisplayMode: .always))
     }
   
 }
