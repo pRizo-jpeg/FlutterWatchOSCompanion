@@ -17,7 +17,6 @@ import WatchConnectivity
         MethodCallHandler.shared.initializeSession()
         
         // Flutter<->Native methods communication channel setup
-        
         /// UI updates and interactions with the Flutter engine must happen on the main thread
         /// Using _DispatchQueue.main.async_ ensures that the setup code runs on the main thread
         DispatchQueue.main.async {
@@ -44,6 +43,6 @@ import WatchConnectivity
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
             /// By calling the completionHandler with [.alert, .sound],
             /// we are specifying that an alert should be shown and a sound should be played when a notification is received while the app is in the foreground.
-        completionHandler([.alert, .sound])
-    }
+            completionHandler([.alert, .sound])
+        }
 }

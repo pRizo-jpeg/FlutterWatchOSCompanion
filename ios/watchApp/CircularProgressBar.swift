@@ -1,16 +1,17 @@
 import SwiftUI
 
 struct CircularProgressBar: View {
+    /// charging data values
     var progress: Double
     var kWh: Double
     var timeRemaining: String
     
+    /// battery animation values
     @State private var isPlaying: Bool = false
     @State private var animationFrame: Int = 0
     @State private var timer: Timer? = nil
-    
-    let animationFrames = (1...4).map { "battery_anim\($0)" } // Update with actual frame count
-    let frameDuration: Double = 0.5 // Duration for each frame in seconds
+    let animationFrames = (1...4).map { "battery_anim\($0)" }
+    let frameDuration: Double = 0.5
     
     var body: some View {
         VStack {
@@ -74,7 +75,7 @@ struct CircularProgressBar: View {
                         .frame(width: 35, height: 35)
                         .foregroundColor(.orange)
                     
-                    Text(isPlaying ? NSLocalizedString("Stop charging", comment: "") : NSLocalizedString("Resume charge", comment: ""))
+                    Text(isPlaying ? "Stop charging" : "Resume charge")
                         .foregroundColor(Color.orange).bold()
                 }
             }
@@ -82,7 +83,7 @@ struct CircularProgressBar: View {
     }
     
     private func startAnimation() {
-        stopAnimation() // Invalidate any existing timer
+        stopAnimation()
         timer = Timer.scheduledTimer(withTimeInterval: frameDuration, repeats: true) { _ in
             animationFrame = (animationFrame + 1) % animationFrames.count
             if !isPlaying {
@@ -108,7 +109,7 @@ struct CircularProgressBar: View {
         case 86...100:
             return "battery_anim4"
         default:
-            return "battery" // Default image
+            return "battery_anim4"
         }
     }
 }

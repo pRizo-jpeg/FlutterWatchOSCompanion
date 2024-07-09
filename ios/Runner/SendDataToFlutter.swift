@@ -5,7 +5,7 @@ class SendDataToFlutter {
     static let shared = SendDataToFlutter()
     private init() {}
     
-    // Methods to send data to Flutter via methodChannels //
+    // Methods to send data to Flutter via methodChannel //
     
     func sendMessageToFlutter(msg: String) {
         DispatchQueue.main.async {
