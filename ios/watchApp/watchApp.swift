@@ -4,11 +4,11 @@ import SwiftUI
 
 @main
 struct watchApp: App {
+    @StateObject private var watchDelegate = WatchDelegate()
     var body: some Scene {
         WindowGroup {
-            DemoView()
-                /// Injecting the watch delegate
-                .environmentObject(WatchDelegate.shared)
-        }
+                    DemoView()
+                        .environmentObject(watchDelegate)
+                }
     }
 }

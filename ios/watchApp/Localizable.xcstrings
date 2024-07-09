@@ -1,0 +1,76 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    " kWh" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kWh"
+          }
+        }
+      }
+    },
+    "%@" : {
+
+    },
+    "No image received" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay imagen"
+          }
+        }
+      }
+    },
+    "Page 1" : {
+
+    },
+    "Page 2" : {
+
+    },
+    "Resume charge" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reanudar carga"
+          }
+        }
+      }
+    },
+    "Send Message" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar mensaje"
+          }
+        }
+      }
+    },
+    "Stop charging" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detener carga"
+          }
+        }
+      }
+    },
+    "Value: %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valor: %lld"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
