@@ -4,8 +4,14 @@ import WatchConnectivity
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
-    /// The channel name must match the one used in the Flutter code
-    private let channelName = "FlutterToWatchOS"
+    
+    private let channelData = "FlutterToWatchOSData"            /// The channel names must match the one used in the Flutter code
+    private let channelComms = "FlutterToWatchOSComms"
+
+    private var updateSeconds = 60.0                            /// Timer for scheduling bg updates
+    private var updateTimer: Timer?
+    
+    
     
     override func application(
         _ application: UIApplication,
@@ -13,36 +19,61 @@ import WatchConnectivity
     ) -> Bool {
         GeneratedPluginRegistrant.register(with: self)
         
-        // Initialize Watch Connectivity session
+        // Initialize Watch Connectivity session //
+        
         MethodCallHandler.shared.initializeSession()
         
         // Flutter<->Native methods communication channel setup
-        /// UI updates and interactions with the Flutter engine must happen on the main thread
-        /// Using _DispatchQueue.main.async_ ensures that the setup code runs on the main thread
-        DispatchQueue.main.async {
-            if let controller = self.window?.rootViewController as? FlutterViewController {
-                let flutterChannel = FlutterMethodChannel(name: self.channelName, binaryMessenger: controller.binaryMessenger)
+        
+        DispatchQueue.main.async {                              /// Using _DispatchQueue.main.async_ ensures that interactions with the Flutter engine happen on the main thread
+            if let controller = 
+                self.window?.rootViewController as? FlutterViewController {
+                let flutterChannel = FlutterMethodChannel(name: self.channelData, binaryMessenger: controller.binaryMessenger)
                 flutterChannel.setMethodCallHandler { (call: FlutterMethodCall, result: @escaping FlutterResult) in
-                    /// Invoked methods call handler
-                    MethodCallHandler.shared.handleMethodCall(call: call, result: result)
+                    MethodCallHandler.shared.handleMethodCall(  /// Invoked methods call handler
+                        call: call,
+                        result: result
+                    )
                 }
             }
         }
         
+        // Initialize updates setup
+        
+        scheduleUpdates()
+        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
+    
+    // Handle updating watch data //
+    
+    private func scheduleUpdates() {
+        updateTimer?.invalidate()
+                        
+        updateTimer = Timer.scheduledTimer(
+            timeInterval: updateSeconds,
+            target: self,
+            selector: #selector(requestUpdates),                /// Method called when the timer fires
+            userInfo: nil,
+            repeats: true
+        )
+    }
+
+    @objc private func requestUpdates() {
+        if WCSession.default.isReachable {
+            SendDataToFlutter.shared.requestUpdates()
+        }
     }
     
     // Handle notifications //
     
-    /// The _userNotificationCenter(:willPresent:withCompletionHandler:) method is part of the UNUserNotificationCenterDelegate protocol
-    /// it allows our app to handle notifications when they are delivered while the app is in the foreground.
-    /// Without this method, notifications might not be displayed if your app is currently running.
+    /// This handles notifications when they are delivered while the app is in the foreground
+    /// without this method, notifications might not be displayed if the app is currently running
     override func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-            /// By calling the completionHandler with [.alert, .sound],
-            /// we are specifying that an alert should be shown and a sound should be played when a notification is received while the app is in the foreground.
-            completionHandler([.alert, .sound])
+            ///  specifying that an alert should be shown and a sound should be played when a notification is received while the app is in the foreground
+            completionHandler([.banner, .sound])
         }
 }

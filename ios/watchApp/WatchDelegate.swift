@@ -4,26 +4,27 @@ import SwiftUI
 import UserNotifications
 
 class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, ObservableObject, UNUserNotificationCenterDelegate {
-    /// properties to update at the UI
     @Published var value: Int = 0
     @Published var msg: String = ""
     @Published var user: User = User(name: nil, id: nil)
     @Published var image: UIImage? = nil
 
-    /// Singleton instance
-    static let shared = WatchDelegate()
+    static let shared = WatchDelegate() // Singleton instance
     
     override init() {
         super.init()
-        /// Check if Watch device has a paired iPhone and activate the session
+        
         if WCSession.isSupported() {
-            /// Get the default Watch <->iPhone session
             let session = WCSession.default
             session.delegate = self
             session.activate()
         }
 
-        // Request notification permissions //
+        requestNotificationPermissions()
+    }
+
+    // Request notification permissions
+    private func requestNotificationPermissions() {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         center.requestAuthorization(options: [.alert, .sound]) { granted, error in
@@ -31,12 +32,10 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
         }
     }
 
-    
-    // Handle received messages from iPhone //
-    /// UI updates and interactions with the Flutter engine must happen on the main thread
-    /// Using _DispatchQueue.main.async_ ensures that the code runs on the main thread
+    // Handle received messages from iPhone
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         var response: [String: Any] = [:]
+        
         if let imgData = message["img"] as? Data {
             DispatchQueue.main.async {
                 self.image = UIImage(data: imgData)
@@ -68,11 +67,10 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
             response["status"] = "User received"
         }
 
-        /// Call the reply handler
         replyHandler(response)
     }
     
-    /// Function to display a notification on watchOS
+    // Function to display a notification on watchOS
     private func sendNotification(title: String, body: String) {
         let content = UNMutableNotificationContent()
         content.title = title
@@ -87,7 +85,7 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
         }
     }
 
-    /// Function to send a message to iPhone
+    // Function to send a message to iPhone
     func sendMessageToiOS(message: String) {
         if WCSession.default.isReachable {
             WCSession.default.sendMessage(["msg": message], replyHandler: { response in
@@ -107,17 +105,38 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
             return
         }
         print("Watch session activated with state: \(activationState.rawValue)")
+        updateStateFromiOS()
     }
+    
+    
+    // Method to update state from iOS
+     private func updateStateFromiOS() {
+         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+             if WCSession.default.isReachable {
+                 WCSession.default.sendMessage(["update": true], replyHandler: { response in
+                     print("Received response from phone: \(response)")
+                 }, errorHandler: { error in
+                     print("Failed to send message to phone: \(error.localizedDescription)")
+                 })
+             } else {
+                 print("Can't ask for initial data")
+             }
+         }
+     }
 
-    // UNUserNotificationCenterDelegate required method
+    // Method called when the app becomes active
+     func applicationDidBecomeActive() {
+         print("watch app active")
+         updateStateFromiOS()
+     }
+    
+    // UNUserNotificationCenterDelegate required methods
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.banner, .sound])
     }
     
-    // UNUserNotificationCenterDelegate required method
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         completionHandler()
     }
 }
-
 

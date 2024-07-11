@@ -4,7 +4,9 @@ import SwiftUI
 
 @main
 struct WatchApp: App {
-    @StateObject private var watchDelegate = WatchDelegate()
+    // Use WKExtensionDelegateAdaptor to link WatchDelegate with the app's lifecycle
+    @WKExtensionDelegateAdaptor(WatchDelegate.self) var watchDelegate
+
     var body: some Scene {
         WindowGroup {
             DemoView()

@@ -3,12 +3,13 @@ import WatchConnectivity
 import Flutter
 
 class MethodCallHandler: NSObject, WCSessionDelegate {
-    /// The shared singleton ensures that there is a single instance of MethodCallHandler managing the communication
-    static let shared = MethodCallHandler()
+
+    static let shared = MethodCallHandler()  /// Singleton instance
+    
     private override init() {}
     
     /// The channel name must match the one used in the Flutter code
-    private let channelName = "FlutterToWatchOS"
+    private let channelData = "FlutterToWatchOSData"
     
     func initializeSession() {
         if WCSession.isSupported() {
@@ -61,7 +62,7 @@ class MethodCallHandler: NSObject, WCSessionDelegate {
             } else {
                 result(FlutterError(code: "INVALID_ARGUMENT", message: "User data not provided", details: nil))
             }
-        case "sendInitialValuesToWatchOS":
+        case "sendDataValuesToWatchOS":
             if let initialValues = call.arguments as? [String: Any],
                let count = initialValues["count"] as? Int,
                let message = initialValues["message"] as? String,
@@ -81,15 +82,18 @@ class MethodCallHandler: NSObject, WCSessionDelegate {
     
 
     // This method listens for messages sent from the watchOS app to the iOS app, and forwards data to Flutter level via SendDataToFlutter class //
-    
+
     func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
         print("Received message from WatchOS: \(message)")
+        
         if let msg = message["msg"] as? String {
             SendDataToFlutter.shared.sendMessageToFlutter(msg: msg)
             replyHandler(["status": "Message received"])
-            /// The method uses a reply handler to send a response back to the watchOS app
-        } else {
-            replyHandler(["status": "Invalid data"])
+        }
+        
+        if let update = message["update"] as? Bool, update == true {
+            SendDataToFlutter.shared.requestUpdates()
+            replyHandler(["status": "Watch asking for update"])
         }
     }
     
