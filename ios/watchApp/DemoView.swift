@@ -6,7 +6,10 @@ struct DemoView: View {
     var body: some View {
         TabView {
             PageOneView()
+            
             PageTwoView()
+            
+            MapView()
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
     }

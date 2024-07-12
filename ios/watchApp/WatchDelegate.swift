@@ -111,7 +111,7 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
     
     // Method to update state from iOS
      private func updateStateFromiOS() {
-         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {   /// Using _DispatchQueue.main.async_ for running on the main thread
              if WCSession.default.isReachable {
                  WCSession.default.sendMessage(["update": true], replyHandler: { response in
                      print("Received response from phone: \(response)")
@@ -126,7 +126,7 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
 
     // Method called when the app becomes active
      func applicationDidBecomeActive() {
-         print("watch app active")
+         print("watch app is foreground")
          updateStateFromiOS()
      }
     

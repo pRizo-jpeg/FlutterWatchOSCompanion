@@ -29,6 +29,7 @@
 		9D62038A2C3D1930002B2387 /* PageTwoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6203892C3D1930002B2387 /* PageTwoView.swift */; };
 		9D62038C2C3D2D75002B2387 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62038B2C3D2D75002B2387 /* CircularProgressBar.swift */; };
 		9D62038E2C3D4C78002B2387 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9D62038D2C3D4C78002B2387 /* Localizable.xcstrings */; };
+		9DA677FA2C41100900D46C77 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA677F92C41100900D46C77 /* MapView.swift */; };
 		A37F3733FE760F0D7B782DEC /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D437106A2BE25E759803692 /* Pods_RunnerTests.framework */; };
 		C8703B41EB62F15E2C8D8EC4 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F1586E207A7B777B0FC51BD /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
@@ -111,6 +112,7 @@
 		9D6203892C3D1930002B2387 /* PageTwoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTwoView.swift; sourceTree = "<group>"; };
 		9D62038B2C3D2D75002B2387 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
 		9D62038D2C3D4C78002B2387 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		9DA677F92C41100900D46C77 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		B9D57E3B1CBE3E7A7266EFD8 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -231,6 +233,7 @@
 				9D0276632C36CDC400D96932 /* WatchDelegate.swift */,
 				9D06C9A02C356E1E001BF01D /* DemoView.swift */,
 				9D6203872C3D1909002B2387 /* PageOneView.swift */,
+				9DA677F92C41100900D46C77 /* MapView.swift */,
 				9D6203892C3D1930002B2387 /* PageTwoView.swift */,
 				9D62038B2C3D2D75002B2387 /* CircularProgressBar.swift */,
 				9D62038D2C3D4C78002B2387 /* Localizable.xcstrings */,
@@ -491,6 +494,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D0F30732C3C33FC0081740A /* User.swift in Sources */,
+				9DA677FA2C41100900D46C77 /* MapView.swift in Sources */,
 				9D06C9A12C356E1E001BF01D /* DemoView.swift in Sources */,
 				9D06C99F2C356E1E001BF01D /* WatchApp.swift in Sources */,
 				9D6203882C3D1909002B2387 /* PageOneView.swift in Sources */,
