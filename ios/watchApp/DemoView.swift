@@ -5,11 +5,13 @@ struct DemoView: View {
     @EnvironmentObject var watchDelegate: WatchDelegate
     var body: some View {
         TabView {
-            PageOneView()
+            PageThreeView()
             
             PageTwoView()
             
-            MapView()
+            PageOneView()
+            
+           
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
     }

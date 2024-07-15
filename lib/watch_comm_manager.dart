@@ -8,8 +8,10 @@ import 'package:guatchos/view/demo_vm.dart';
 /// This class manages Native<->Flutter method channel handlers
 class WatchOsCommManager extends GetxController {
   // Channel is shared between Flutter and Native layers
-  static const MethodChannel _channelData = MethodChannel('FlutterToWatchOSData');
-  static const MethodChannel _channelComms = MethodChannel('FlutterToWatchOSComms');
+  static const MethodChannel _channelData =
+      MethodChannel('FlutterToWatchOSData');
+  static const MethodChannel _channelComms =
+      MethodChannel('FlutterToWatchOSComms');
   final DemoPageVm _demoPageVm = Get.find<DemoPageVm>();
 
   void init() {
@@ -23,21 +25,23 @@ class WatchOsCommManager extends GetxController {
           final String message = call.arguments;
           handleReceivedMessage(message);
           break;
+        case "updateWatchOS":
+          updateWatchOS();
+          break;
+
         default:
           log("Unknown data method: ${call.method}");
       }
     });
+  }
 
-    // Handler for receiving comm state calls from WatchOS
-    _channelComms.setMethodCallHandler((call) async {
-      switch (call.method) {
-        case "updateWatchOS":
-          updateWatchOS();
-          break;
-        default:
-          log("Unknown comms method: ${call.method}");
-      }
-    });
+  // Send a commState message
+  Future<void> sendResponse({required CommState commState, String? error}) async {
+    try {
+      await _channelComms.invokeMethod('response', error != null ? "${commState.toString()} $error" : commState.toString());
+    } catch (e) {
+      log("Failed to send response to WatchOS: $e");
+    }
   }
 
   // Handle request update from watchOS
@@ -45,8 +49,11 @@ class WatchOsCommManager extends GetxController {
     log("Handling update request from watchOS");
     try {
       sendDataValuesToWatchOS();
-    } catch (e){
+      sendResponse(commState: CommState.ok);
+    } catch (e) {
       log("$e");
+      sendResponse(commState: CommState.error, error: e.toString());
+
     }
   }
 
@@ -57,8 +64,11 @@ class WatchOsCommManager extends GetxController {
       sendCountToWatchOS(_demoPageVm.counter.value);
       sendMessageToWatchOS('Hello from Flutter');
       sendImageToWatchOS('assets/logo.png');
+
     } catch (e) {
       log("Failed to send data values to WatchOS: $e");
+      sendResponse(commState: CommState.error, error: e.toString());
+
     }
   }
 
@@ -69,8 +79,11 @@ class WatchOsCommManager extends GetxController {
         'title': title,
         'body': body,
       });
+
     } on PlatformException catch (e) {
       log("Failed to send notification: '${e.message}'.");
+      sendResponse(commState: CommState.error, error: e.toString());
+
     }
   }
 
@@ -81,8 +94,11 @@ class WatchOsCommManager extends GetxController {
       final Uint8List pngData = assetData.buffer.asUint8List();
 
       await _channelData.invokeMethod('sendImageToWatchOS', pngData);
+
     } catch (e) {
       log("Failed to send image to WatchOS: $e");
+      sendResponse(commState: CommState.error, error: e.toString());
+
     }
   }
 
@@ -90,8 +106,11 @@ class WatchOsCommManager extends GetxController {
   Future<void> sendCountToWatchOS(int count) async {
     try {
       await _channelData.invokeMethod('sendCountToWatchOS', count);
+
     } catch (e) {
       log("Failed to send count to WatchOS: $e");
+      sendResponse(commState: CommState.error, error: e.toString());
+
     }
   }
 
@@ -99,8 +118,11 @@ class WatchOsCommManager extends GetxController {
   Future<void> sendMessageToWatchOS(String message) async {
     try {
       await _channelData.invokeMethod('sendMessageToWatchOS', message);
+
     } catch (e) {
       log("Failed to send message to WatchOS: $e");
+      sendResponse(commState: CommState.error, error: e.toString());
+
     }
   }
 
@@ -111,18 +133,42 @@ class WatchOsCommManager extends GetxController {
         'name': user.name,
         'id': user.id,
       });
+
     } catch (e) {
       log("Failed to send user to WatchOS: $e");
+      sendResponse(commState: CommState.error, error: e.toString());
+
     }
   }
 
   // Handle received message from watchOS to display a snack
   void handleReceivedMessage(String message) {
-    Get.showSnackbar(GetSnackBar(
-      title: "WatchOS",
-      message: message,
-      snackPosition: SnackPosition.TOP,
-      duration: 1.seconds,
-    ));
+    try{
+      Get.showSnackbar(GetSnackBar(
+        title: "WatchOS",
+        message: message,
+        snackPosition: SnackPosition.TOP,
+        duration: 1.seconds,
+      ));
+      sendResponse(commState: CommState.ok);
+    } catch (e){
+      sendResponse(commState: CommState.error, error: e.toString());
+    }
+
+  }
+}
+
+enum CommState {
+  ok,
+  error;
+
+  @override
+  String toString() {
+    switch (this) {
+      case CommState.ok:
+        return 'ok';
+      case CommState.error:
+        return 'error';
+    }
   }
 }

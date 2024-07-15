@@ -10,12 +10,29 @@ class MethodCallHandler: NSObject, WCSessionDelegate {
     
     /// The channel name must match the one used in the Flutter code
     private let channelData = "FlutterToWatchOSData"
+    /// The channel name must match the one used in the Flutter code
+    private let channelComms = "FlutterToWatchOSComms"
     
     func initializeSession() {
         if WCSession.isSupported() {
             let session = WCSession.default
             session.delegate = self
             session.activate()
+        }
+    }
+    
+    // Handles Flutter Comms Status responses //
+    func handleComms(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+        case "response":
+            if let response = call.arguments as? String {
+                print("Flutter: request served \(response)")
+                result(nil)
+            } else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "response not provided", details: nil))
+            }
+        default:
+            result(FlutterMethodNotImplemented)
         }
     }
     
@@ -62,19 +79,6 @@ class MethodCallHandler: NSObject, WCSessionDelegate {
             } else {
                 result(FlutterError(code: "INVALID_ARGUMENT", message: "User data not provided", details: nil))
             }
-        case "sendDataValuesToWatchOS":
-            if let initialValues = call.arguments as? [String: Any],
-               let count = initialValues["count"] as? Int,
-               let message = initialValues["message"] as? String,
-               let userDict = initialValues["user"] as? [String: Any],
-               let name = userDict["name"] as? String,
-               let id = userDict["id"] as? Int {
-                let user = User(name: name, id: id)
-                SendDataToWatch.shared.sendInitialValuesToWatchOS(count: count, message: message, user: user)
-                result(nil)
-            } else {
-                result(FlutterError(code: "INVALID_ARGUMENT", message: "Initial values not provided correctly", details: nil))
-            }
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -84,16 +88,17 @@ class MethodCallHandler: NSObject, WCSessionDelegate {
     // This method listens for messages sent from the watchOS app to the iOS app, and forwards data to Flutter level via SendDataToFlutter class //
 
     func session(_ session: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
-        print("Received message from WatchOS: \(message)")
         
-        if let msg = message["msg"] as? String {
+        if let msg = message["status"] as? String {
+            print("WatchOS: Need updates - reason: \((message["status"] ?? "unknown status"))")
             SendDataToFlutter.shared.sendMessageToFlutter(msg: msg)
             replyHandler(["status": "Message received"])
         }
         
-        if let update = message["update"] as? Bool, update == true {
+        if let update = message["reason"] as? String {
+            print("WatchOS: Need updates - reason: \((message["reason"] ?? "unknown reason"))")
             SendDataToFlutter.shared.requestUpdates()
-            replyHandler(["status": "Watch asking for update"])
+            replyHandler(["status": "Updating"])
         }
     }
     

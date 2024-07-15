@@ -8,7 +8,7 @@ import WatchConnectivity
     private let channelData = "FlutterToWatchOSData"            /// The channel names must match the one used in the Flutter code
     private let channelComms = "FlutterToWatchOSComms"
 
-    private var updateSeconds = 60.0                            /// Timer for scheduling bg updates
+    private var updateSeconds = 60.0                            /// Timer for scheduling auto updates
     private var updateTimer: Timer?
     
     
@@ -28,9 +28,18 @@ import WatchConnectivity
         DispatchQueue.main.async {                              /// Using _DispatchQueue.main.async_ ensures that interactions with the Flutter engine happen on the main thread
             if let controller = 
                 self.window?.rootViewController as? FlutterViewController {
-                let flutterChannel = FlutterMethodChannel(name: self.channelData, binaryMessenger: controller.binaryMessenger)
-                flutterChannel.setMethodCallHandler { (call: FlutterMethodCall, result: @escaping FlutterResult) in
-                    MethodCallHandler.shared.handleMethodCall(  /// Invoked methods call handler
+                // Main Data channel
+                let flutterDataChannel = FlutterMethodChannel(name: self.channelData, binaryMessenger: controller.binaryMessenger)
+                flutterDataChannel.setMethodCallHandler { (call: FlutterMethodCall, result: @escaping FlutterResult) in
+                    MethodCallHandler.shared.handleMethodCall(  /// Invoked data methods call handler
+                        call: call,
+                        result: result
+                    )
+                }
+                // Aux CommState channel
+                let flutterCommsChannel = FlutterMethodChannel(name: self.channelComms, binaryMessenger: controller.binaryMessenger)
+                flutterCommsChannel.setMethodCallHandler { (call: FlutterMethodCall, result: @escaping FlutterResult) in
+                    MethodCallHandler.shared.handleComms(       /// Invoked comms methods call handler
                         call: call,
                         result: result
                     )
@@ -38,14 +47,15 @@ import WatchConnectivity
             }
         }
         
-        // Initialize updates setup
+            
+        scheduleUpdates()                                       /// Initialize auto requesting updates
         
-        scheduleUpdates()
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    // Handle updating watch data //
+    
+    // Updating watch data //
     
     private func scheduleUpdates() {
         updateTimer?.invalidate()
@@ -65,7 +75,8 @@ import WatchConnectivity
         }
     }
     
-    // Handle notifications //
+    
+    // Handling notifications //
     
     /// This handles notifications when they are delivered while the app is in the foreground
     /// without this method, notifications might not be displayed if the app is currently running
@@ -73,7 +84,7 @@ import WatchConnectivity
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-            ///  specifying that an alert should be shown and a sound should be played when a notification is received while the app is in the foreground
+            ///  specifying that banner should be shown and a sound should be played when a notification is received while the app is in the foreground
             completionHandler([.banner, .sound])
         }
 }
