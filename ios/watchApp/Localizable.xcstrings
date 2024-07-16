@@ -24,6 +24,15 @@
         }
       }
     },
+    "No zone selected" : {
+
+    },
+    "Preauthorization: %@ €" : {
+
+    },
+    "Price: %@ €/kWh" : {
+
+    },
     "Resume charge" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -54,6 +63,9 @@
           }
         }
       }
+    },
+    "Type: %@" : {
+
     },
     "Value: %lld" : {
       "localizations" : {

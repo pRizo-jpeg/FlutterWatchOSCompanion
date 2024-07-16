@@ -4,6 +4,45 @@ import SwiftUI
 import UserNotifications
 import CoreLocation
 
+struct Vehicle: Identifiable {
+    let id: UUID
+    let name: String
+}
+
+struct PaymentMethod: Identifiable {
+    let id: UUID
+    let name: String
+}
+
+struct EVCharger: Identifiable {
+    let id: UUID
+    let plugType: String
+    let price: Double?
+    let preauthorizationFee: Double?
+}
+
+struct ChargingZone: Identifiable {
+    let id: UUID
+    let name: String
+    let coordinate: CLLocationCoordinate2D
+    var chargers: [EVCharger]
+    
+    var availablePlugTypes: [String] {
+        chargers.map { $0.plugType }
+    }
+    
+    enum PlugType: String, CaseIterable {
+        case type1 = "Type 1"
+        case type2 = "Type 2"
+        case chademo = "CHAdeMO"
+        case ccs1 = "CCS Type 1"
+        case ccs2 = "CCS Type 2"
+        case gbtDC = "GB/T DC"
+        case gbtAC = "GB/T AC"
+        case nacs = "NACS"
+    }
+}
+
 class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, ObservableObject, UNUserNotificationCenterDelegate {
     @Published var value: Int = 0
     @Published var msg: String = ""
@@ -11,6 +50,17 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
     @Published var image: UIImage? = nil
     @Published var chargingZones: [ChargingZone] = []
     @Published var selectedZone: ChargingZone? = nil
+    @Published var vehicleList: [Vehicle] = [
+        Vehicle(id: UUID(), name: "Tesla Model S"),
+        Vehicle(id: UUID(), name: "Nissan Leaf"),
+        Vehicle(id: UUID(), name: "BMW i3")
+    ]
+
+    @Published var paymentList: [PaymentMethod] = [
+        PaymentMethod(id: UUID(), name: "Credit Card"),
+        PaymentMethod(id: UUID(), name: "PayPal"),
+        PaymentMethod(id: UUID(), name: "Apple Pay")
+    ]
     
     static let shared = WatchDelegate()
     
@@ -28,23 +78,23 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
     }
     
     private func loadInitialChargers() {
-        
-        
         chargingZones = [
             ChargingZone(id: UUID(), name: "Mercadona EV Station", coordinate: CLLocationCoordinate2D(latitude: 39.6333, longitude: -0.5964), chargers: [
-                EVCharger(id: UUID(), plugType: "ev.plug.dc.ccs1"),
-                EVCharger(id: UUID(), plugType: "ev.plug.dc.ccs2"),
-                EVCharger(id: UUID(), plugType: "ev.plug.dc.gb.t"),
-                EVCharger(id: UUID(), plugType: "ev.plug.ac.type.2"),
+                EVCharger(id: UUID(), plugType: "CCS Type 1", price: 15.5, preauthorizationFee: 5),
+                EVCharger(id: UUID(), plugType: "CCS Type 2", price: 25.5, preauthorizationFee: nil),
+                EVCharger(id: UUID(), plugType: "GB/T DC", price: 12, preauthorizationFee: 10),
+                EVCharger(id: UUID(), plugType: "Type 2", price: nil, preauthorizationFee: nil)
             ]),
             ChargingZone(id: UUID(), name: "Calle Pascual Free Charger", coordinate: CLLocationCoordinate2D(latitude: 39.6350, longitude: -0.5950), chargers: [
-                EVCharger(id: UUID(), plugType: "ev.plug.dc.chademo"),
-                EVCharger(id: UUID(), plugType: "ev.plug.ac.type.2")
+                EVCharger(id: UUID(), plugType: "CHAdeMO", price: nil, preauthorizationFee: nil),
+                EVCharger(id: UUID(), plugType: "Type 2", price: 15.5, preauthorizationFee: 10)
             ]),
-            ChargingZone(id: UUID(), name: "Circular Demo Llíria", coordinate: CLLocationCoordinate2D(latitude: 39.6310, longitude: -0.5980), chargers: [       EVCharger(id: UUID(), plugType: "ev.plug.ac.type.1"),
-                EVCharger(id: UUID(), plugType: "ev.plug.ac.type.2"),
-                EVCharger(id: UUID(), plugType: "ev.plug.dc.chademo"),
-                EVCharger(id: UUID(), plugType: "ev.plug.dc.gb.t")])
+            ChargingZone(id: UUID(), name: "Circular Demo Llíria", coordinate: CLLocationCoordinate2D(latitude: 39.6310, longitude: -0.5980), chargers: [
+                EVCharger(id: UUID(), plugType: "Type 1", price: 1.5, preauthorizationFee: 15),
+                EVCharger(id: UUID(), plugType: "Type 2", price: 7.5, preauthorizationFee: nil),
+                EVCharger(id: UUID(), plugType: "CHAdeMO", price: 5.5, preauthorizationFee: nil),
+                EVCharger(id: UUID(), plugType: "GB/T DC", price: 11.1, preauthorizationFee: 1)
+            ])
         ]
     }
     
@@ -159,19 +209,6 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
     
     func isSelectedZoneIcon(_ icon: String) -> Bool {
         guard let selectedZone = selectedZone else { return false }
-        return selectedZone.chargers.contains(where: { $0.plugType == icon })
+        return selectedZone.availablePlugTypes.contains(icon)
     }
-}
-
-
-struct EVCharger: Identifiable {
-    let id: UUID
-    let plugType: String
-}
-
-struct ChargingZone: Identifiable {
-    let id: UUID
-    let name: String
-    let coordinate: CLLocationCoordinate2D
-    var chargers: [EVCharger]
 }

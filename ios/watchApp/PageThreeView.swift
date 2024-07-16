@@ -3,56 +3,71 @@ import WatchKit
 
 struct PageThreeView: View {
     @EnvironmentObject var watchDelegate: WatchDelegate
+    @State private var stack = [String]()
 
     let columns = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]
 
-    let plugIcons = [
-        "ev.plug.ac.type.1",
-        "ev.plug.ac.type.2",
-        "ev.plug.dc.ccs1",
-        "ev.plug.dc.ccs2",
-        "ev.plug.dc.chademo",
-        "ev.plug.dc.gb.t",
-        "ev.plug.ac.gb.t",
-        "ev.plug.dc.nacs"
+    let plugIcons: [String: ChargingZone.PlugType] = [
+        "ev.plug.ac.type.1": .type1,
+        "ev.plug.ac.type.2": .type2,
+        "ev.plug.dc.ccs1": .ccs1,
+        "ev.plug.dc.ccs2": .ccs2,
+        "ev.plug.dc.chademo": .chademo,
+        "ev.plug.dc.gb.t": .gbtDC,
+        "ev.plug.ac.gb.t": .gbtAC,
+        "ev.plug.dc.nacs": .nacs 
     ]
 
     var isZoneSelected: Bool {
-        plugIcons.contains { watchDelegate.isSelectedZoneIcon($0) }
+        watchDelegate.selectedZone != nil
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            MapView()
-                .frame(height: WKInterfaceDevice.current().screenBounds.height * 0.67)
-                .cornerRadius(30)
+        NavigationStack(path: $stack) {
+            VStack(spacing: 0) {
+                MapView()
+                    .frame(height: WKInterfaceDevice.current().screenBounds.height * 0.67)
+                    .cornerRadius(30)
 
-            HStack(spacing: 0) {
-                LazyVGrid(columns: columns, spacing: 10) {
-                    ForEach(plugIcons, id: \.self) { icon in
-                        Image(systemName: icon)
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(watchDelegate.isSelectedZoneIcon(icon) ? .green.opacity(0.85) : .darkGreen.opacity(0.5))
+                HStack(spacing: 0) {
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ForEach(plugIcons.keys.sorted(), id: \.self) { icon in
+                            Image(systemName: icon)
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(isZoneSelected && watchDelegate.isSelectedZoneIcon(plugIcons[icon]!.rawValue) ? .green.opacity(0.85) : .darkGreen.opacity(0.5))
+                                .onTapGesture {
+                                    if let zone = watchDelegate.chargingZones.first(where: { $0.chargers.contains(where: { $0.plugType == plugIcons[icon]!.rawValue }) }) {
+                                        watchDelegate.selectedZone = zone
+                                    }
+                                }
+                        }
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding(10)
+                    Button(action: {
+                        if let zone = watchDelegate.selectedZone {
+                            stack.append(zone.id.uuidString)
+                        }
+                    }) {
+                        Image(systemName: "ev.charger.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(isZoneSelected ? .green.opacity(0.85) : .darkGreen.opacity(0.5))
+                    }
+                    .frame(width: 55)
+                    .disabled(!isZoneSelected)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(10)
-                Button(action: {
-                    // action
-                }) {
-                    Image(systemName: "ev.charger.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(isZoneSelected ? .green.opacity(0.85) : .darkGreen.opacity(0.5))
-                }
-                .frame(width: 55)
-                .disabled(!isZoneSelected) 
+                .frame(height: WKInterfaceDevice.current().screenBounds.height * 0.30)
+                .padding(.bottom, 30)
             }
-            .frame(height: WKInterfaceDevice.current().screenBounds.height * 0.30)
-            .padding(.bottom, 30)
+            .navigationDestination(for: String.self) { value in
+                if watchDelegate.chargingZones.first(where: { $0.id.uuidString == value }) != nil {
+                    BookingView().environmentObject(watchDelegate)
+                }
+            }
         }
     }
 }

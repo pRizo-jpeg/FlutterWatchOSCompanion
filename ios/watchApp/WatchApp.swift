@@ -9,7 +9,7 @@ struct WatchApp: App {
 
     var body: some Scene {
         WindowGroup {
-            DemoView()
+            MainView()
                 .environmentObject(watchDelegate)
         }
     }
