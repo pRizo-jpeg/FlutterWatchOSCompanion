@@ -98,7 +98,7 @@ class MethodCallHandler: NSObject, WCSessionDelegate {
         if let update = message["reason"] as? String {
             print("WatchOS: Need updates - reason: \((message["reason"] ?? "unknown reason"))")
             SendDataToFlutter.shared.requestUpdates()
-            replyHandler(["status": "Updating"])
+            replyHandler(["reason": "Updating"])
         }
     }
     

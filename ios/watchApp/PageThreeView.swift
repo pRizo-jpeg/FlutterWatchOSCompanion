@@ -5,17 +5,23 @@ struct PageThreeView: View {
     @EnvironmentObject var watchDelegate: WatchDelegate
 
     let columns = [
-        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
+        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]
 
-    let icons = [
-        "ev.plug.ac.type.1.fill",
-        "ev.plug.ac.type.2.fill",
-        "ev.plug.dc.ccs1.fill",
-        "ev.plug.dc.ccs2.fill",
-        "ev.plug.dc.chademo.fill",
-        "ev.plug.dc.nacs.fill"
+    let plugIcons = [
+        "ev.plug.ac.type.1",
+        "ev.plug.ac.type.2",
+        "ev.plug.dc.ccs1",
+        "ev.plug.dc.ccs2",
+        "ev.plug.dc.chademo",
+        "ev.plug.dc.gb.t",
+        "ev.plug.ac.gb.t",
+        "ev.plug.dc.nacs"
     ]
+
+    var isZoneSelected: Bool {
+        plugIcons.contains { watchDelegate.isSelectedZoneIcon($0) }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -25,32 +31,35 @@ struct PageThreeView: View {
 
             HStack(spacing: 0) {
                 LazyVGrid(columns: columns, spacing: 10) {
-                    ForEach(icons, id: \.self) { icon in
+                    ForEach(plugIcons, id: \.self) { icon in
                         Image(systemName: icon)
                             .resizable()
                             .frame(width: 20, height: 20)
-                            .foregroundColor(.darkGreen.opacity(0.5))
+                            .foregroundColor(watchDelegate.isSelectedZoneIcon(icon) ? .green.opacity(0.85) : .darkGreen.opacity(0.5))
                     }
                 }
-                .frame(maxWidth: .infinity) // Make grid take available space
+                .frame(maxWidth: .infinity)
                 .padding(10)
-
                 Button(action: {
-                    // Button 2 Action
+                    // action
                 }) {
-                    Text("Book")
-                        .foregroundColor(Color.green.opacity(0.85))
-                        .bold()
+                    Image(systemName: "ev.charger.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(isZoneSelected ? .green.opacity(0.85) : .darkGreen.opacity(0.5))
                 }
+                .frame(width: 55)
+                .disabled(!isZoneSelected) 
             }
-            .frame(height: WKInterfaceDevice.current().screenBounds.height * 0.30).padding(.bottom, 30)
+            .frame(height: WKInterfaceDevice.current().screenBounds.height * 0.30)
+            .padding(.bottom, 30)
         }
     }
 }
 
 struct PageThreeView_Previews: PreviewProvider {
     static var previews: some View {
-        PageThreeView().environmentObject(WatchDelegate())
+        PageThreeView().environmentObject(WatchDelegate.shared)
     }
 }
 

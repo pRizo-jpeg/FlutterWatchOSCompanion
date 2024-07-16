@@ -8,15 +8,15 @@ struct MapView: View {
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     ))
     
-    @State private var selectedCharger: EVCharger?
+    @State private var selectedZone: ChargingZone?
     
     var body: some View {
         Map(position: $mapPosition) {
-            ForEach(watchDelegate.chargers) { charger in
-                Annotation("", coordinate: charger.coordinate) {
+            ForEach(watchDelegate.chargingZones) { zone in
+                Annotation("", coordinate: zone.coordinate) {
                     ZStack(alignment: .center) {
-                        if selectedCharger?.id == charger.id {
-                            Text(charger.chargerName)
+                        if selectedZone?.id == zone.id {
+                            Text(zone.name)
                                 .bold()
                                 .foregroundColor(.white)
                                 .padding(5)
@@ -28,26 +28,28 @@ struct MapView: View {
                         }
                         
                         Circle()
-                            .fill(selectedCharger?.id == charger.id ? Color.green.opacity(0.3) : Color.clear)
+                            .fill(selectedZone?.id == zone.id ? Color.green.opacity(0.3) : Color.clear)
                             .frame(width: 20, height: 20)
-                            .background(Color(.sRGB, red: 0.0, green: 0.3, blue: 0.0, opacity: 1.0))
+                            .background(selectedZone?.id == zone.id ? Color(red: 0.0, green: 0.4, blue: 0.0) : Color(red: 0.0, green: 0.3, blue: 0.0))
                             .clipShape(Circle())
                             .overlay(
                                 Circle()
-                                    .stroke(Color.green, lineWidth: 2)
+                                    .stroke(selectedZone?.id == zone.id ? Color.green.opacity(0.5) : Color(red: 0.0, green: 0.5, blue: 0.0), lineWidth: 2)
                                     .frame(width: 20, height: 20)
                             )
                             .overlay(
-                                Image(systemName: "bolt.car.fill")
+                                Image(systemName: "bolt.fill")
                                     .foregroundColor(.green)
                                     .font(.system(size: 12))
                             )
                             .onTapGesture {
-                                if selectedCharger?.id == charger.id {
-                                    selectedCharger = nil
+                                if selectedZone?.id == zone.id {
+                                    selectedZone = nil
+                                    watchDelegate.selectedZone = nil
                                 } else {
-                                    selectedCharger = charger
-                                    centerMap(on: charger.coordinate)
+                                    selectedZone = zone
+                                    watchDelegate.selectedZone = zone
+                                    centerMap(on: zone.coordinate)
                                 }
                             }
                             .zIndex(0)
@@ -60,15 +62,17 @@ struct MapView: View {
             MapCompass()
         }
         .gesture(TapGesture().onEnded {
-            selectedCharger = nil
+            selectedZone = nil
+            watchDelegate.selectedZone = nil
         })
     }
+    
     private func centerMap(on coordinate: CLLocationCoordinate2D) {
-            withAnimation {
-                mapPosition = .region(MKCoordinateRegion(
-                    center: coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                ))
-            }
+        withAnimation {
+            mapPosition = .region(MKCoordinateRegion(
+                center: coordinate,
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            ))
         }
+    }
 }

@@ -9,9 +9,10 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
     @Published var msg: String = ""
     @Published var user: User = User(name: nil, id: nil)
     @Published var image: UIImage? = nil
-    @Published var chargers: [EVCharger] = [] // Added chargers array
-
-    static let shared = WatchDelegate() // Singleton instance
+    @Published var chargingZones: [ChargingZone] = []
+    @Published var selectedZone: ChargingZone? = nil
+    
+    static let shared = WatchDelegate()
     
     override init() {
         super.init()
@@ -21,24 +22,32 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
             session.delegate = self
             session.activate()
         }
-
+        
         requestNotificationPermissions()
-        loadInitialChargers() // Load initial chargers data
+        loadInitialChargers()
     }
-
-    // Load initial chargers data
+    
     private func loadInitialChargers() {
-        chargers = [
-            EVCharger(coordinate: CLLocationCoordinate2D(latitude: 39.6333, longitude: -0.5964), chargerName: "Mercadona EV Station"),
-            EVCharger(coordinate: CLLocationCoordinate2D(latitude: 39.6350, longitude: -0.5950), chargerName: "Calle Pascual Free Charger"),
-            EVCharger(coordinate: CLLocationCoordinate2D(latitude: 39.6310, longitude: -0.5980), chargerName: "Circular Demo Llíria"),
-            EVCharger(coordinate: CLLocationCoordinate2D(latitude: 39.6340, longitude: -0.5990), chargerName: "Avenida de la Estación Charger"),
-            EVCharger(coordinate: CLLocationCoordinate2D(latitude: 39.6320, longitude: -0.5940), chargerName: "Plaza Mayor Charging Point"),
-            EVCharger(coordinate: CLLocationCoordinate2D(latitude: 39.6433, longitude: -0.5964), chargerName: "Calle San Vicente Charger")
+        
+        
+        chargingZones = [
+            ChargingZone(id: UUID(), name: "Mercadona EV Station", coordinate: CLLocationCoordinate2D(latitude: 39.6333, longitude: -0.5964), chargers: [
+                EVCharger(id: UUID(), plugType: "ev.plug.dc.ccs1"),
+                EVCharger(id: UUID(), plugType: "ev.plug.dc.ccs2"),
+                EVCharger(id: UUID(), plugType: "ev.plug.dc.gb.t"),
+                EVCharger(id: UUID(), plugType: "ev.plug.ac.type.2"),
+            ]),
+            ChargingZone(id: UUID(), name: "Calle Pascual Free Charger", coordinate: CLLocationCoordinate2D(latitude: 39.6350, longitude: -0.5950), chargers: [
+                EVCharger(id: UUID(), plugType: "ev.plug.dc.chademo"),
+                EVCharger(id: UUID(), plugType: "ev.plug.ac.type.2")
+            ]),
+            ChargingZone(id: UUID(), name: "Circular Demo Llíria", coordinate: CLLocationCoordinate2D(latitude: 39.6310, longitude: -0.5980), chargers: [       EVCharger(id: UUID(), plugType: "ev.plug.ac.type.1"),
+                EVCharger(id: UUID(), plugType: "ev.plug.ac.type.2"),
+                EVCharger(id: UUID(), plugType: "ev.plug.dc.chademo"),
+                EVCharger(id: UUID(), plugType: "ev.plug.dc.gb.t")])
         ]
     }
-
-    // Request notification permissions
+    
     private func requestNotificationPermissions() {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
@@ -46,8 +55,7 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
             print("WatchOS: Notification permission: \(granted)")
         }
     }
-
-    // Handle received messages from iPhone
+    
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         var response: [String: Any] = [:]
         
@@ -81,17 +89,16 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
             }
             response["status"] = "User received"
         }
-
+        
         replyHandler(response)
     }
     
-    // Function to display a notification on watchOS
     private func sendNotification(title: String, body: String) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = UNNotificationSound.default
-
+        
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
@@ -101,8 +108,7 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
             }
         }
     }
-
-    // Function to send a message to iPhone
+    
     func sendMessageToiOS(message: String) {
         if WCSession.default.isReachable {
             WCSession.default.sendMessage(["status": message], replyHandler: { response in
@@ -114,8 +120,7 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
             print("WatchOS: Can't reach iOS")
         }
     }
-
-    // Method called when the session is activated
+    
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if let error = error {
             print("WatchOS: WCSession activation failed with error: \(error.localizedDescription)")
@@ -125,28 +130,25 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
         updateStateFromiOS(reason: "a session started")
     }
     
-    // Method to update state from iOS
     private func updateStateFromiOS(reason: String) {
-         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {   /// Using _DispatchQueue.main.async_ for running on the main thread
-             if WCSession.default.isReachable {
-                 WCSession.default.sendMessage(["reason": reason], replyHandler: { response in
-                     print("iOS: \(response["reason"] ?? "unknown reason")")
-                 }, errorHandler: { error in
-                     print("Watchos: Failed to send message to phone: \(error.localizedDescription)")
-                 })
-             } else {
-                 print("WatchOS: Can't reach iOS")
-             }
-         }
-     }
-
-    // Method called when the app becomes active
-     func applicationDidBecomeActive() {
-         print("WatchOS: on Foreground")
-         updateStateFromiOS(reason: "app foregrounded")
-     }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            if WCSession.default.isReachable {
+                WCSession.default.sendMessage(["reason": reason], replyHandler: { response in
+                    print("iOS: \(response["reason"] ?? "unknown reason")")
+                }, errorHandler: { error in
+                    print("WatchOS: Failed to send message to phone: \(error.localizedDescription)")
+                })
+            } else {
+                print("WatchOS: Can't reach iOS")
+            }
+        }
+    }
     
-    // UNUserNotificationCenterDelegate required methods
+    func applicationDidBecomeActive() {
+        print("WatchOS: on Foreground")
+        updateStateFromiOS(reason: "app foregrounded")
+    }
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.banner, .sound])
     }
@@ -154,11 +156,22 @@ class WatchDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, Observabl
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         completionHandler()
     }
+    
+    func isSelectedZoneIcon(_ icon: String) -> Bool {
+        guard let selectedZone = selectedZone else { return false }
+        return selectedZone.chargers.contains(where: { $0.plugType == icon })
+    }
 }
+
 
 struct EVCharger: Identifiable {
-    let id = UUID()
-    let coordinate: CLLocationCoordinate2D
-    let chargerName: String
+    let id: UUID
+    let plugType: String
 }
 
+struct ChargingZone: Identifiable {
+    let id: UUID
+    let name: String
+    let coordinate: CLLocationCoordinate2D
+    var chargers: [EVCharger]
+}
