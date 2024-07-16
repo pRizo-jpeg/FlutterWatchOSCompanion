@@ -28,7 +28,7 @@ struct PageThreeView: View {
         NavigationStack(path: $stack) {
             VStack(spacing: 0) {
                 MapView()
-                    .frame(height: WKInterfaceDevice.current().screenBounds.height * 0.67)
+                    .frame(width: WKInterfaceDevice.current().screenBounds.width, height: WKInterfaceDevice.current().screenBounds.height * 0.67)
                     .cornerRadius(30)
 
                 HStack(spacing: 0) {
