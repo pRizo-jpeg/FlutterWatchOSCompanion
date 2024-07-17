@@ -25,13 +25,34 @@
       }
     },
     "No zone selected" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay zona"
+          }
+        }
+      }
     },
     "Preauthorization: %@ €" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preautorización: %@ €"
+          }
+        }
+      }
     },
     "Price: %@ €/kWh" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Precio: %@ €/kWh"
+          }
+        }
+      }
     },
     "Resume charge" : {
       "extractionState" : "manual",
@@ -65,7 +86,14 @@
       }
     },
     "Type: %@" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Typo: %@"
+          }
+        }
+      }
     },
     "Value: %lld" : {
       "localizations" : {

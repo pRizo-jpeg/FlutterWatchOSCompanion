@@ -32,6 +32,8 @@
 		9DA677FA2C41100900D46C77 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA677F92C41100900D46C77 /* MapView.swift */; };
 		9DCE7E722C44FCEC0076B7F5 /* PageThreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCE7E712C44FCEC0076B7F5 /* PageThreeView.swift */; };
 		9DCE7E742C468EC00076B7F5 /* BookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCE7E732C468EC00076B7F5 /* BookingView.swift */; };
+		9DF024C42C47D223000286D3 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF024C32C47D223000286D3 /* MockData.swift */; };
+		9DF024C62C47D34C000286D3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF024C52C47D34C000286D3 /* Models.swift */; };
 		A37F3733FE760F0D7B782DEC /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D437106A2BE25E759803692 /* Pods_RunnerTests.framework */; };
 		C8703B41EB62F15E2C8D8EC4 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F1586E207A7B777B0FC51BD /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
@@ -117,6 +119,8 @@
 		9DA677F92C41100900D46C77 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		9DCE7E712C44FCEC0076B7F5 /* PageThreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageThreeView.swift; sourceTree = "<group>"; };
 		9DCE7E732C468EC00076B7F5 /* BookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingView.swift; sourceTree = "<group>"; };
+		9DF024C32C47D223000286D3 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		9DF024C52C47D34C000286D3 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		B9D57E3B1CBE3E7A7266EFD8 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -245,6 +249,8 @@
 				9D62038D2C3D4C78002B2387 /* Localizable.xcstrings */,
 				9D06C9A22C356E20001BF01D /* Assets.xcassets */,
 				9D06C9A42C356E20001BF01D /* Preview Content */,
+				9DF024C32C47D223000286D3 /* MockData.swift */,
+				9DF024C52C47D34C000286D3 /* Models.swift */,
 			);
 			path = watchApp;
 			sourceTree = "<group>";
@@ -502,12 +508,14 @@
 				9D0F30732C3C33FC0081740A /* User.swift in Sources */,
 				9DA677FA2C41100900D46C77 /* MapView.swift in Sources */,
 				9D06C9A12C356E1E001BF01D /* MainView.swift in Sources */,
+				9DF024C62C47D34C000286D3 /* Models.swift in Sources */,
 				9D06C99F2C356E1E001BF01D /* WatchApp.swift in Sources */,
 				9DCE7E742C468EC00076B7F5 /* BookingView.swift in Sources */,
 				9D6203882C3D1909002B2387 /* PageOneView.swift in Sources */,
 				9DCE7E722C44FCEC0076B7F5 /* PageThreeView.swift in Sources */,
 				9D62038C2C3D2D75002B2387 /* CircularProgressBar.swift in Sources */,
 				9D62038A2C3D1930002B2387 /* PageTwoView.swift in Sources */,
+				9DF024C42C47D223000286D3 /* MockData.swift in Sources */,
 				9D0276642C36CDC400D96932 /* WatchDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

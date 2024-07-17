@@ -1,7 +1,6 @@
 import SwiftUI
 import MapKit
 
-
 // View for displaying the map //
 struct MapView: View {
     
@@ -20,6 +19,7 @@ struct MapView: View {
             ForEach(watchDelegate.chargingZones) { zone in
                 Annotation("", coordinate: zone.coordinate) {
                     ZStack(alignment: .center) {
+                        
                         if selectedZone?.id == zone.id {                        /// Label bubble when selected zone
                             Text(zone.name)
                                 .bold()
@@ -29,7 +29,7 @@ struct MapView: View {
                                 .cornerRadius(10)
                                 .font(.system(size: 12))
                                 .offset(y: -35)
-                                .zIndex(10)
+                                .zIndex(100)
                         }
                         
                         TailMarker(isSelected: selectedZone?.id == zone.id)     /// Initial camera position of the map
@@ -38,11 +38,17 @@ struct MapView: View {
                                     selectedZone = nil
                                     watchDelegate.selectedZone = nil
                                 } else {
-                                    selectedZone = zone
-                                    watchDelegate.selectedZone = zone
-                                    centerMap(on: zone.coordinate)
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                        print("marker press")
+                                        selectedZone = zone
+                                        watchDelegate.selectedZone = zone
+                                        centerMap(on: zone.coordinate)
+                                    }
                                 }
-                            }.zIndex(5)
+                            }
+
+                            .zIndex(0)
+                            .allowsHitTesting(true)
                     }
                 }
             }
@@ -51,9 +57,13 @@ struct MapView: View {
         .mapControls {
             MapCompass()
         }
+        .contentShape(Rectangle()).zIndex(-1)
         .gesture(TapGesture().onEnded {
-            selectedZone = nil
-            watchDelegate.selectedZone = nil
+            print("map press")
+            if selectedZone != nil {
+                selectedZone = nil
+                watchDelegate.selectedZone = nil
+            }
         })
     }
     
@@ -72,7 +82,6 @@ struct MapView: View {
 
 
 // Circle + small inverted triangle to make map marker shape //
-
 struct TailMarker: View {
     var isSelected: Bool
     var body: some View {

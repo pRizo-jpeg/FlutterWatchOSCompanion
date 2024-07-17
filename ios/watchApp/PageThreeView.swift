@@ -38,7 +38,6 @@ struct PageThreeView: View {
                                 .resizable()
                                 .frame(width: 20, height: 20)
                                 .foregroundColor(isZoneSelected && watchDelegate.isSelectedZoneIcon(plugIcons[icon]!.rawValue) ? .green.opacity(0.85) : .darkGreen.opacity(0.5))
-                               
                         }
                     }
                     .frame(maxWidth: .infinity)

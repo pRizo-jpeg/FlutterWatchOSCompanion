@@ -1,12 +1,9 @@
 import SwiftUI
-
-// WatchOS app entry point //
+import WatchKit
 
 @main
 struct WatchApp: App {
-    // Use WKExtensionDelegateAdaptor to link WatchDelegate with the app's lifecycle
-    @WKExtensionDelegateAdaptor(WatchDelegate.self) var watchDelegate
-
+    @WKApplicationDelegateAdaptor(WatchDelegate.self) private var watchDelegate: WatchDelegate
     var body: some Scene {
         WindowGroup {
             MainView()

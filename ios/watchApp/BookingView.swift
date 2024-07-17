@@ -14,7 +14,7 @@ struct BookingView: View {
                         ZStack(alignment: .leading) {
                             Rectangle()
                                 .fill(Color.green)
-                                .frame(width: 3).padding(.leading, 5).padding(.vertical, 7.5)
+                                .frame(width: 3).padding(.leading, 5).padding(.vertical, 8.5)
                             VStack(alignment: .leading) {
                                 HStack {
                                     VStack(alignment: .leading) {
