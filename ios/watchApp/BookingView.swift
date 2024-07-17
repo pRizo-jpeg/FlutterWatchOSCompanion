@@ -2,9 +2,12 @@ import SwiftUI
 import CoreLocation
 
 struct BookingView: View {
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var watchDelegate: WatchDelegate
     @State private var selectedVehicle: String = ""
     @State private var selectedPaymentMethod: String = ""
+    @State private var showAlert = false
+    @State private var selectedCharger: EVCharger?
 
     var body: some View {
         ScrollView {
@@ -41,6 +44,18 @@ struct BookingView: View {
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(10)
                             .padding(.vertical, 2)
+                            .onTapGesture {
+                                selectedCharger = charger
+                                showAlert = true
+                            }
+                            .swipeActions(edge: .leading) {
+                                Button(action: {
+                                    print("Botón de acción presionado")
+                                }) {
+                                    Text("Action")
+                                }
+                                .tint(.blue)
+                            }
                         }
                     }
                 } else {
@@ -51,6 +66,25 @@ struct BookingView: View {
             }
         }
         .navigationTitle(watchDelegate.selectedZone?.name ?? "Booking")
+        .onDisappear {
+            presentationMode.wrappedValue.dismiss()
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text(selectedCharger?.plugType ?? "Tipo ??"),
+                message: Text("\n Do you want to book the charger?"),
+                primaryButton: .cancel(),
+                secondaryButton: .default(Text("Continue")) {
+                    bookCharger(selectedCharger)
+                }
+            )
+        }
+    }
+
+    private func bookCharger(_ charger: EVCharger?) {
+        guard let charger = charger else { return }
+        // Implement your booking action here
+        print("Booking charger: \(charger)")
     }
 
     private func iconName(for plugType: String) -> String {
@@ -74,11 +108,5 @@ struct BookingView: View {
         default:
             return "ev.plug.ac.type.2"
         }
-    }
-}
-
-struct BookingView_Previews: PreviewProvider {
-    static var previews: some View {
-        BookingView().environmentObject(WatchDelegate.shared)
     }
 }

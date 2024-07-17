@@ -14,6 +14,7 @@ struct MapView: View {
     
     @State private var selectedZone: ChargingZone?
     
+    
     var body: some View {
         Map(position: $mapPosition) {
             ForEach(watchDelegate.chargingZones) { zone in
@@ -32,13 +33,17 @@ struct MapView: View {
                                 .zIndex(100)
                         }
                         
-                        TailMarker(isSelected: selectedZone?.id == zone.id)     /// Initial camera position of the map
-                            .onTapGesture {
+                        TailMarker(isSelected: selectedZone?.id == zone.id)     /// Locations marker and gesture detector
+                            .onTapGesture {                                     /// Marker selected toggle
                                 if selectedZone?.id == zone.id {
-                                    selectedZone = nil
-                                    watchDelegate.selectedZone = nil
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { /// as a fix for tap overlapping
+                                        print("reset press")
+                                        selectedZone = nil
+                                        watchDelegate.selectedZone = nil
+                                    }
+                                  
                                 } else {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { /// as a fix for tap overlapping
                                         print("marker press")
                                         selectedZone = zone
                                         watchDelegate.selectedZone = zone
@@ -46,7 +51,6 @@ struct MapView: View {
                                     }
                                 }
                             }
-
                             .zIndex(0)
                             .allowsHitTesting(true)
                     }
@@ -58,7 +62,7 @@ struct MapView: View {
             MapCompass()
         }
         .contentShape(Rectangle()).zIndex(-1)
-        .gesture(TapGesture().onEnded {
+        .gesture(TapGesture().onEnded {                                         /// Map area tapped
             print("map press")
             if selectedZone != nil {
                 selectedZone = nil
@@ -67,10 +71,8 @@ struct MapView: View {
         })
     }
     
-    private func centerMap(on coordinate: CLLocationCoordinate2D) {
-        let currentLatitudeDelta = mapPosition.region?.span.latitudeDelta ?? 0.01
-        let newLatitudeDelta = max(currentLatitudeDelta, 0.01)
-        
+    private func centerMap(on coordinate: CLLocationCoordinate2D) {             /// Map centering on spot function
+        let newLatitudeDelta = max(0.005, 0.005)
         withAnimation {
             mapPosition = .region(MKCoordinateRegion(
                 center: coordinate,

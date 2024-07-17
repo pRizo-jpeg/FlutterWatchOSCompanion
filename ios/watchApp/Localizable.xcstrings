@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "\n Do you want to book the charger?" : {
+
+    },
     " kWh" : {
       "localizations" : {
         "es" : {
@@ -13,6 +16,41 @@
     },
     "%@" : {
 
+    },
+    "Action" : {
+
+    },
+    "Confirm Booking" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmar Reserva"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        }
+      }
+    },
+    "Do you want to book the charger with type %@?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Quieres reservar el cargador tipo %@?"
+          }
+        }
+      }
     },
     "No image received" : {
       "localizations" : {
@@ -101,6 +139,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Valor: %lld"
+          }
+        }
+      }
+    },
+    "Yes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si"
           }
         }
       }
